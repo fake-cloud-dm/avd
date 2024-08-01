@@ -84,6 +84,11 @@ variable "org_short" {
   default = ""
 }
 
+variable "dns_ip" {
+  type    = string
+  default = ""
+}
+
 variable "org" {
   type    = string
   default = ""
@@ -95,6 +100,11 @@ variable "criticality" {
 }
 
 variable "application" {
+  type    = string
+  default = ""
+}
+
+variable "subscription_id" {
   type    = string
   default = ""
 }
@@ -132,4 +142,30 @@ variable "environment_short" {
 variable "environment" {
   type        = string
   description = "The Environment of the Resource Group."
+}
+
+variable "image_definitions" {
+  type = map(object({
+    name      = string
+    publisher = string
+    offer     = string
+    sku       = string
+  }))
+}
+
+variable "hostpool_details" {
+  type = map(object({
+    name                     = string
+    friendly_name            = string
+    validate_environment     = bool
+    start_vm_on_connect      = bool
+    preferred_app_group_type = string
+    type                     = string
+    maximum_sessions_allowed = number
+    load_balancer_type       = string
+    custom_rdp_properties    = string
+    workspace_name           = string
+    application_group_name   = string
+    application_group_type   = string
+  }))
 }
