@@ -3,7 +3,7 @@ resource "azurerm_storage_account" "storage_account" {
 
   name                          = lower("${each.key}")
   resource_group_name           = azurerm_resource_group.rg_avd["fslogix"].name
-  location                      = var.location
+  location                      = each.value.location
   account_kind                  = each.value.account_kind
   account_tier                  = each.value.account_tier
   account_replication_type      = each.value.account_replication_type
@@ -12,20 +12,20 @@ resource "azurerm_storage_account" "storage_account" {
   provider                      = azurerm.avd
 }
 
-resource "azurerm_storage_container" "storage_container" {
+resource "azurerm_storage_share" "file_share" {
   for_each = var.storage_account_map
 
-  name                  = each.value.container
-  storage_account_name  = azurerm_storage_account.storage_account[each.key].name
-  container_access_type = "private"
-  provider              = azurerm.avd
+  name                 = each.value.share
+  storage_account_name = azurerm_storage_account.storage_account[each.key].name
+  quota                = 100
+  provider             = azurerm.avd
 }
 
 resource "azurerm_private_endpoint" "pe" {
   for_each = var.storage_account_map
 
   name                = "pep-${each.key}"
-  location            = var.location
+  location            = each.value.location
   resource_group_name = azurerm_resource_group.rg_avd["fslogix"].name
   subnet_id           = azurerm_subnet.subnet_avd["fslogix"].id
 

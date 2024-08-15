@@ -1,34 +1,3 @@
-##### AZURE COMPUTE GALLERY AND IMAGE DEFINITIONS #####
-resource "azurerm_shared_image_gallery" "gallery" {
-  name                = "gal_avd_prod_uksouth_001"
-  resource_group_name = azurerm_resource_group.rg_avd["gal"].name
-  location            = azurerm_resource_group.rg_avd["gal"].location
-  description         = "Shared Images"
-
-  tags = local.tags
-}
-
-resource "azurerm_shared_image" "image_definition" {
-  for_each = var.image_definitions
-
-  name         = each.value.name
-  gallery_name = azurerm_shared_image_gallery.gallery.name
-
-  os_type                  = "Windows"
-  hyper_v_generation       = "V2"
-  trusted_launch_supported = true
-
-  identifier {
-    publisher = each.value.publisher
-    offer     = each.value.offer
-    sku       = each.value.sku
-  }
-
-  resource_group_name = azurerm_resource_group.rg_avd["gal"].name
-  location            = azurerm_resource_group.rg_avd["gal"].location
-  tags                = local.tags
-}
-
 ##### AVD WORKSPACE #####
 resource "azurerm_virtual_desktop_workspace" "workspace" {
   for_each = var.hostpool_details
@@ -40,6 +9,8 @@ resource "azurerm_virtual_desktop_workspace" "workspace" {
   resource_group_name = azurerm_resource_group.rg_avd["avd"].name
   location            = azurerm_resource_group.rg_avd["avd"].location
   tags                = local.tags
+
+  provider = azurerm.avd
 }
 
 ##### AVD HOST POOL #####
@@ -60,6 +31,8 @@ resource "azurerm_virtual_desktop_host_pool" "hostpool" {
   resource_group_name = azurerm_resource_group.rg_avd["avd"].name
   location            = azurerm_resource_group.rg_avd["avd"].location
   tags                = local.tags
+
+  provider = azurerm.avd
 }
 
 resource "azurerm_virtual_desktop_host_pool_registration_info" "hostpool_reginfo" {
@@ -67,6 +40,12 @@ resource "azurerm_virtual_desktop_host_pool_registration_info" "hostpool_reginfo
 
   hostpool_id     = azurerm_virtual_desktop_host_pool.hostpool[each.key].id
   expiration_date = timeadd(timestamp(), "719h")
+
+  lifecycle {
+    ignore_changes = all
+  }
+
+  provider = azurerm.avd
 }
 
 ##### AVD APPLICATION GROUP AND ASSOCIATION #####
@@ -82,10 +61,14 @@ resource "azurerm_virtual_desktop_application_group" "app_group" {
   resource_group_name = azurerm_resource_group.rg_avd["avd"].name
   location            = azurerm_resource_group.rg_avd["avd"].location
   tags                = local.tags
+
+  provider = azurerm.avd
 }
 
 resource "azurerm_virtual_desktop_workspace_application_group_association" "workspace_assoc" {
   for_each             = var.hostpool_details
   workspace_id         = azurerm_virtual_desktop_workspace.workspace[each.key].id
   application_group_id = azurerm_virtual_desktop_application_group.app_group[each.key].id
+
+  provider = azurerm.avd
 }

@@ -5,6 +5,8 @@ resource "azurerm_recovery_services_vault" "main" {
   location            = azurerm_resource_group.rg_avd["avd"].location
   sku                 = "Standard"
 
+  provider = azurerm.avd
+
   tags = local.tags
 }
 
@@ -22,4 +24,6 @@ resource "azurerm_backup_policy_vm" "main" {
   retention_daily {
     count = 30
   }
+
+  provider = azurerm.avd
 }

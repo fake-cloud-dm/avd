@@ -6,6 +6,8 @@ resource "azurerm_private_dns_zone_virtual_network_link" "dns_link" {
   private_dns_zone_name = data.azurerm_private_dns_zone.existing_private_dns_file.name
   virtual_network_id    = azurerm_virtual_network.vnet_avd["avd"].id
 
+  tags = local.tags
+
   #   depends_on = [azurerm_private_dns_zone.private_dns]
   provider = azurerm.connectivity
 }

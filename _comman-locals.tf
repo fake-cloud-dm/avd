@@ -41,5 +41,12 @@ locals {
 
   snet_map_filtered_avd = { for k, v in var.subnet_map : k => v if can(regex("avd", v.vnet_name)) }
 
+  vm_details = [{
+    #Base Image VM Details
+    vmname = "vm-img-uks-001"
+    vmsize = "Standard_D2s_v5"
+    vmzone = "1"
+  }]
+
 }
 

@@ -59,12 +59,7 @@ variable "avd_subscription_id" {
   default = ""
 }
 
-variable "dev_subscription_id" {
-  type    = string
-  default = ""
-}
-
-variable "uat_subscription_id" {
+variable "existing_keyvault_name" {
   type    = string
   default = ""
 }
@@ -77,6 +72,10 @@ variable "tenant_id" {
 variable "customer_name" {
   type    = string
   default = ""
+}
+
+variable "dns_servers" {
+  type = list(string)
 }
 
 variable "org_short" {
@@ -168,4 +167,106 @@ variable "hostpool_details" {
     application_group_name   = string
     application_group_type   = string
   }))
+}
+
+#FSLogix Stoage Variables
+variable "fslogixshare" {
+  description = "FSLogix share Name"
+  type        = string
+  default     = null
+}
+variable "fslogixstorage" {
+  description = "FSLogix storage account name"
+  type        = string
+  default     = null
+}
+
+#Shared Image Gallery Variables
+variable "image_gallery_name" {
+  description = "Image Gallery Name"
+  type        = string
+  default     = null
+}
+variable "shared_image_name" {
+  description = "Shared Image Name"
+  type        = string
+  default     = null
+}
+variable "sig_image_version" {
+  description = "Image version"
+  type        = string
+  default     = null
+}
+variable "rep_reg" {
+  description = "Image replication region"
+  type        = string
+  default     = null
+}
+variable "imagesize" {
+  description = "Image size - used by Packer."
+  type        = string
+  default     = null
+}
+
+
+#Other Variables
+variable "vm_size" {
+  description = "Specifies the size of the virtual machine."
+}
+
+variable "image_publisher" {
+  description = "Image Publisher"
+}
+
+variable "image_offer" {
+  description = "Image Offer"
+}
+
+variable "image_sku" {
+  description = "Image SKU"
+}
+
+variable "image_version" {
+  description = "Image Version"
+}
+
+variable "admin_username" {
+  description = "Local Admin Username"
+}
+
+variable "admin_password" {
+  description = "Admin Password"
+}
+
+variable "subnet_id" {
+  description = "Azure Subnet ID"
+}
+
+variable "vm_name" {
+  description = "Virtual Machine Name"
+}
+
+variable "vm_count" {
+  description = "Number of Session Host VMs to create"
+}
+
+variable "domain" {
+  description = "Domain to join"
+}
+
+variable "domainuser" {
+  description = "Domain Join User Name"
+}
+
+variable "oupath" {
+  description = "OU Path"
+}
+
+variable "domainpassword" {
+  description = "Domain User Password"
+}
+
+variable "artifactslocation" {
+  description = "Location of WVD Artifacts"
+  default     = "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration.zip"
 }

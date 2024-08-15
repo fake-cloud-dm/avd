@@ -9,6 +9,12 @@ provider "azurerm" {
 }
 
 provider "azurerm" {
+  alias           = "management"
+  subscription_id = var.mgmt_subscription_id
+  features {}
+}
+
+provider "azurerm" {
   alias           = "avd"
   subscription_id = var.avd_subscription_id
   features {}

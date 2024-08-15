@@ -4,7 +4,7 @@ resource "azurerm_virtual_network" "vnet_avd" {
   name                = lower("vnet-${each.key}-${var.environment_short}-${var.location}-001")
   location            = var.location
   resource_group_name = azurerm_resource_group.rg_avd["vnet-avd"].name
-  dns_servers         = [var.dns_ip]
+  dns_servers         = var.dns_servers
   tags                = local.tags
   provider            = azurerm.avd
 }
@@ -22,6 +22,7 @@ resource "azurerm_virtual_network_peering" "avd_to_hub" {
   allow_gateway_transit        = false
   use_remote_gateways          = false
 
+  provider = azurerm.avd
 }
 
 resource "azurerm_virtual_network_peering" "hub_to_avd" {
